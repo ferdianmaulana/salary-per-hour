@@ -65,4 +65,4 @@ CREATE OR REPLACE TABLE `playground.salary_per_hour` AS
         ON a.year = b.year 
         AND a.month = b.month
         AND a.branch_id = b.branch_id
-    ORDER BY 1, 2, CAST(branch_id AS INT64) ASC
+    ORDER BY 1, 2, CAST(branch_id AS INT64) ASC;
