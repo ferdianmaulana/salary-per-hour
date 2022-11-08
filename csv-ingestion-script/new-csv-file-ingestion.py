@@ -1,5 +1,4 @@
-#In this case, I want to insert the data to Google BigQuery
-
+#This script will be scheduled daily to ingest the data to Google BigQuery
 #Import required libraries
 import utils as ut                              #utils library, that already created
 from datetime import date
@@ -9,7 +8,7 @@ from datetime import timedelta
 yesterday = date.today() - timedelta(days = 1)
 yesterday = yesterday.strftime("%d%m%Y")
 
-#Define required parameter for the insert_data function
+#Define required parameter for the csv_to_bq_dif_file function
 file_name = yesterday+'_timesheets.csv'     #Data Source File Name
 path = 'data/'                              #Data Source Path Folder
 table_name = 'timesheets'                   #Destination Table Name

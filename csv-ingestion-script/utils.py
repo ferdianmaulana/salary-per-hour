@@ -11,7 +11,8 @@ from datetime import date
 today = date.today()
 today = today.strftime("%d%m%Y")
 
-#Define the insert_data funtion
+#Define the data ingestion funtions
+#This function will be used when the new data updated by difference csv file that differentiate using the date prefix of the file name.
 def csv_to_bq_dif_file(file_name, path, table_name, project_id, dataset_id, credential, method):
     try:
         df = pd.read_csv(path+'/'+file_name)
@@ -29,6 +30,7 @@ def csv_to_bq_dif_file(file_name, path, table_name, project_id, dataset_id, cred
             raise
     return print(status)
 
+#This function will be used when the new data updated in the same csv file (incremental update).
 def csv_to_bq_same_file(file_name, path, table_name, project_id, dataset_id, credential, method):
     try:
         log = pd.read_csv('log_'+table_name+'.csv')
