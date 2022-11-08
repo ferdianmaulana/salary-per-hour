@@ -7,9 +7,9 @@ This folder contains SQL script that will create or replace *salary_per_hour* ta
 This sub-cte load the raw data by join two (2) tables which are timesheets & employees, and do some transformation or feature engineering and resulting 3 new columns which are:
     - *hours_raw that* contains total working hours for each employees per day.
     - *v_avg_hours that* contains the result of the moving average calculation that averaging five (5) following and five (5) preceding working hours for each employees. This feature created because there are some employee timesheets data that have working hours more than 12 hours. I assume that this company is from Indonesia, and based on Keputusan Menteri Tenaga Kerja dan Transmigrasi Nomor 102 Tahun 2004, the maximum working hours is 12 hours. So I, think this is a data anomaly that needed to be handled.
-    Gambar yg lebih dari 12
+![lebih dari 12 jam](https://user-images.githubusercontent.com/37076565/200488318-bca8d19b-4dbb-451b-aaa8-aff9b8823847.PNG)
     Moreover, there are other anomaly that spotted. There are employee timesheets data that have Null value on the checkin or checkout columns. So, it's not possible to get the total working hours for some timesheets data.
-    Gambar yang working hours null
+![riwayat dari akhir sampai awal checkin atau out null](https://user-images.githubusercontent.com/37076565/200488393-4c96c1cb-729a-4670-a017-e5a5a94b9210.PNG)
     So, with mov_avg_hours columns, we want to replace the working hours data that have null values with this column and hopefully it can capture the working hours pattern for each person.
     - *avg_branch_hours* contains the working hours average for each branch. This columns is used to replace the timesheet data that the employees from the first time they work until the current time always have NULL value on the checkin or checkout column. So, the working hours pattern of those employees can't be captured using moving average.
 2. *missing_hours_handling* <br />
@@ -23,7 +23,7 @@ This sub-cte is created to get the total hours for each branch per month.
 6. The Main Query <br />
 In this query joined the *get_total_salaries* and *get_total_hours* sub-cte so the *salary_per_hour* can be calculated using *total_salaries* divided by total_hours.
 The picture below is the outpot of the SQL script.
-Gambar ouput
+![output](https://user-images.githubusercontent.com/37076565/200488615-2292d5da-69b0-4164-a8d7-b7c9b7ea4646.PNG)
 
 ## csv-ingestion-script Folder
 This folder contains Python script that will ingest the csv data to Google BigQuery using append method. So, it will only read the new data. In this case, I assume that it can be two (2) different cases. The first one is the new data will be updated by using new csv file that differentiated by the prefix (date) file name. The second case is the new data will be updated in the same csv file. So, it will incrementally update in the same csv file. Based on that assumption, I create two (2) functions that can accommodate those two cases. In this folder, there three (3) scripts:
