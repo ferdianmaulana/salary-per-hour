@@ -5,8 +5,8 @@ This repo is created for current payroll cost-effective monitoring SQL and Pytho
 This folder contains SQL script that will create or replace *salary_per_hour* table from CTE query. There are six (6) sub-cte in this CTE query.
 1. *transform_hours* <br /> 
 This sub-cte load the raw data by join two (2) tables which are timesheets & employees, and do some transformation or feature engineering and resulting 3 new columns which are:
-    - *hours_raw that* contains total working hours for each employees per day.
-    - *v_avg_hours that* contains the result of the moving average calculation that averaging five (5) following and five (5) preceding working hours for each employees. This feature created because there are some employee timesheets data that have working hours more than 12 hours. I assume that this company is from Indonesia, and based on Keputusan Menteri Tenaga Kerja dan Transmigrasi Nomor 102 Tahun 2004, the maximum working hours is 12 hours. So I, think this is a data anomaly that needed to be handled.
+    - *hours_raw* that contains total working hours for each employees per day.
+    - *mov_avg_hours* that contains the result of the moving average calculation that averaging five (5) following and five (5) preceding working hours for each employees. This feature created because there are some employee timesheets data that have working hours more than 12 hours. I assume that this company is from Indonesia, and based on Keputusan Menteri Tenaga Kerja dan Transmigrasi Nomor 102 Tahun 2004, the maximum working hours is 12 hours. So I, think this is a data anomaly that needed to be handled.
 ![lebih dari 12 jam](https://user-images.githubusercontent.com/37076565/200488318-bca8d19b-4dbb-451b-aaa8-aff9b8823847.PNG)
     Moreover, there are other anomaly that spotted. There are employee timesheets data that have Null value on the checkin or checkout columns. So, it's not possible to get the total working hours for some timesheets data.
 ![riwayat dari akhir sampai awal checkin atau out null](https://user-images.githubusercontent.com/37076565/200488393-4c96c1cb-729a-4670-a017-e5a5a94b9210.PNG)
@@ -27,7 +27,7 @@ The picture below is the outpot of the SQL script.
 
 ## csv-ingestion-script Folder
 This folder contains Python script that will ingest the csv data to Google BigQuery using append method. So, it will only read the new data. In this case, I assume that it can be two (2) different cases. The first one is the new data will be updated by using new csv file that differentiated by the prefix (date) file name. The second case is the new data will be updated in the same csv file. So, it will incrementally update in the same csv file. Based on that assumption, I create two (2) functions that can accommodate those two cases. In this folder, there three (3) scripts:
-1. *utils* <br />
+1. *utils.py* <br />
     This script contains the data ingestion functions. There are two (2) functions in this script, namely:
     - *csv_to_bq_dif_file* <br />
         This function will be used when the new data updated by difference csv file that differentiate using the date prefix of the file name. This function has seven (7) parameters such as:
@@ -48,3 +48,7 @@ This folder contains Python script that will ingest the csv data to Google BigQu
         + dataset_id = the schema of the destination table
         + credential = the GCP credential (Service Account)
         + method = ingestion method (replace or append)
+2. *new-csv-file-ingestion.py* <br />
+    This script contains *csv_to_bq_dif_file* funtion call from *utils.py*. Before it, paramters wil be set first.
+3. *same-csv-file-ingestion.py* <br />
+    This script contains *csv_to_bq_same_file* funtion call from *utils.py*. Before it, paramters wil be set first.
